@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Specie;
 use App\Http\Requests\StoreSpecieRequest;
 use App\Http\Requests\UpdateSpecieRequest;
+use Illuminate\Http\Request;
 
 class SpecieController extends Controller
 {
@@ -13,8 +14,7 @@ class SpecieController extends Controller
      */
     public function index()
     {
-          // Devuelve todas las especies
-          return Specie::all();
+        return Specie::all();  // Devuelve todas las especies
     }
 
     /**
@@ -22,7 +22,7 @@ class SpecieController extends Controller
      */
     public function create()
     {
-        //
+        // Si usas formularios para crear, puedes devolver una vista de creación aquí
     }
 
     /**
@@ -30,16 +30,16 @@ class SpecieController extends Controller
      */
     public function store(StoreSpecieRequest $request)
     {
-        // Validar los datos de entrada
+        // Validar y crear una nueva especie
         $validatedData = $request->validate([
             'commercial_name' => 'required|string|max:255',
-            'scientific_name' => 'required|string|max:255',
+            'scientific_name' => 'nullable|string|max:255',
         ]);
 
-        // Crear una nueva especie
+        // Crear la nueva especie
         $specie = Specie::create($validatedData);
 
-        // Retornar la especie creada con un código de estado HTTP 201 (creado)
+        // Retorna la especie creada con un código de estado HTTP 201 (creado)
         return response()->json($specie, 201);
     }
 
@@ -48,8 +48,8 @@ class SpecieController extends Controller
      */
     public function show(Specie $specie)
     {
-       // Mostrar una especie específica por su ID
-       return response()->json($specie);
+        // Muestra una especie específica por su ID
+        return response()->json($specie);
     }
 
     /**
@@ -57,7 +57,8 @@ class SpecieController extends Controller
      */
     public function edit(Specie $specie)
     {
-        //
+        // Generalmente no se usa en RESTful APIs
+        // En su lugar, la actualización se maneja directamente en la acción update()
     }
 
     /**
@@ -65,16 +66,16 @@ class SpecieController extends Controller
      */
     public function update(UpdateSpecieRequest $request, Specie $specie)
     {
-         // Validar los datos de entrada
-         $validatedData = $request->validate([
+        // Valida los datos de entrada
+        $validatedData = $request->validate([
             'commercial_name' => 'required|string|max:255',
-            'scientific_name' => 'required|string|max:255',
+            'scientific_name' => 'nullable|string|max:255',
         ]);
 
-        // Actualizar la especie con los nuevos datos
+        // Actualiza la especie con los nuevos datos
         $specie->update($validatedData);
 
-        // Retornar la especie actualizada
+        // Retorna la especie actualizada
         return response()->json($specie);
     }
 
@@ -83,11 +84,11 @@ class SpecieController extends Controller
      */
     public function destroy(Specie $specie)
     {
-               // Eliminar la especie
-               $specie->delete();
+        // Elimina la especie
+        $specie->delete();
 
-               // Retornar una respuesta de éxito
-               return response()->json(null, 204);
-
+        // Retorna una respuesta de éxito sin contenido
+        return response()->json(null, 204);  // 204 No Content
     }
 }
+
