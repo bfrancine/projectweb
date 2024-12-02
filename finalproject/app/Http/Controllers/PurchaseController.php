@@ -2,65 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Purchase;
-use App\Http\Requests\StorePurchaseRequest;
-use App\Http\Requests\UpdatePurchaseRequest;
+use App\Models\Tree;
+use App\Models\Friend;
+use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function purchaseTree(Request $request)
     {
-        //
-    }
+        $validatedData = $request->validate([
+            'tree_id' => 'required|exists:tree,id',
+            'friend_id' => 'required|exists:friends,id',
+        ]);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $tree = Tree::find($validatedData['tree_id']);
+        $friend = Friend::find($validatedData['friend_id']);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorePurchaseRequest $request)
-    {
-        //
-    }
+        if (!$tree || !$friend) {
+            return response()->json(['message' => 'Invalid data'], 400);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Purchase $purchase)
-    {
-        //
-    }
+        try {
+            $tree->update(['state_tree_id' => 2]); // Suponiendo que '2' es el ID del estado "Vendido"
+            $friend->trees()->attach($tree->id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Purchase $purchase)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePurchaseRequest $request, Purchase $purchase)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Purchase $purchase)
-    {
-        //
+            return response()->json(['message' => 'Purchase successful'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error in purchase'], 500);
+        }
     }
 }

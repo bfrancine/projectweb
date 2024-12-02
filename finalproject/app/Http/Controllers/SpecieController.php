@@ -3,92 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\Specie;
-use App\Http\Requests\StoreSpecieRequest;
-use App\Http\Requests\UpdateSpecieRequest;
 use Illuminate\Http\Request;
 
 class SpecieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Muestra todas las especies
     public function index()
     {
-        return Specie::all();  // Devuelve todas las especies
+        $species = Specie::all();  // Obtiene todas las especies de la base de datos
+        return view('species.index', compact('species'));  // Retorna la vista con las especies
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Muestra los detalles de una especie
+    public function show($id)
+    {
+        $specie = Specie::findOrFail($id);  // Encuentra la especie por ID o lanza un error 404
+        return view('species.show', compact('specie'));  // Muestra la vista con los detalles de la especie
+    }
+
+    // Muestra el formulario para agregar una nueva especie
     public function create()
     {
-        // Si usas formularios para crear, puedes devolver una vista de creación aquí
+        return view('species.create');  // Retorna la vista para agregar una nueva especie
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreSpecieRequest $request)
+    // Almacena una nueva especie en la base de datos
+    public function store(Request $request)
     {
-        // Validar y crear una nueva especie
+        // Validar los datos del formulario
         $validatedData = $request->validate([
             'commercial_name' => 'required|string|max:255',
             'scientific_name' => 'nullable|string|max:255',
         ]);
 
         // Crear la nueva especie
-        $specie = Specie::create($validatedData);
+        Specie::create($validatedData);
 
-        // Retorna la especie creada con un código de estado HTTP 201 (creado)
-        return response()->json($specie, 201);
+        // Redirigir con mensaje de éxito
+        return redirect()->route('species.index')->with('success', 'Specie added successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Specie $specie)
+    // Muestra el formulario para editar una especie existente
+    public function edit($id)
     {
-        // Muestra una especie específica por su ID
-        return response()->json($specie);
+        $specie = Specie::findOrFail($id);  // Encuentra la especie por ID
+        return view('species.edit', compact('specie'));  // Muestra la vista para editar
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Specie $specie)
+    // Actualiza una especie existente
+    public function update(Request $request, $id)
     {
-        // Generalmente no se usa en RESTful APIs
-        // En su lugar, la actualización se maneja directamente en la acción update()
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateSpecieRequest $request, Specie $specie)
-    {
-        // Valida los datos de entrada
+        // Validar los datos del formulario
         $validatedData = $request->validate([
             'commercial_name' => 'required|string|max:255',
             'scientific_name' => 'nullable|string|max:255',
         ]);
 
-        // Actualiza la especie con los nuevos datos
+        // Encuentra la especie por ID y actualiza los datos
+        $specie = Specie::findOrFail($id);
         $specie->update($validatedData);
 
-        // Retorna la especie actualizada
-        return response()->json($specie);
+        // Redirigir con mensaje de éxito
+        return redirect()->route('species.index')->with('success', 'Specie updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Specie $specie)
+    
+    // Elimina una especie de la base de datos
+    public function destroy($id)
     {
-        // Elimina la especie
-        $specie->delete();
-
-        // Retorna una respuesta de éxito sin contenido
-        return response()->json(null, 204);  // 204 No Content
+        $specie = Specie::findOrFail($id);  // Encuentra la especie por ID o lanza un error 404
+        $specie->delete();  // Elimina la especie
+        return redirect()->route('species.index')->with('success', 'Specie deleted successfully!');
     }
 }
 

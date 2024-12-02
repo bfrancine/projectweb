@@ -3,64 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tree;
-use App\Http\Requests\StoreTreeRequest;
-use App\Http\Requests\UpdateTreeRequest;
+use Illuminate\Http\Request;
 
 class TreeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $trees = Tree::with(['specie', 'state'])->get();
+        return response()->json($trees, 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
+        $tree = Tree::with(['specie', 'state'])->find($id);
+        if (!$tree) {
+            return response()->json(['message' => 'Tree not found'], 404);
+        }
+        return response()->json($tree, 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreTreeRequest $request)
+    public function availableTrees()
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Tree $tree)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Tree $tree)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateTreeRequest $request, Tree $tree)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Tree $tree)
-    {
-        //
+        $trees = Tree::with(['specie', 'state'])
+            ->whereHas('state', function ($query) {
+                $query->where('type_state', 'Disponible')->orWhere('type_state', 'Available');
+            })->get();
+        return response()->json($trees, 200);
     }
 }
+

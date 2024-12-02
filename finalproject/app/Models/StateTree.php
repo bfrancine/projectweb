@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StateTree extends Model
 {
-    /** @use HasFactory<\Database\Factories\StateTreeFactory> */
     use HasFactory;
+
+    protected $fillable = ['type_state'];
 }
