@@ -8,7 +8,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="flex flex-col bg-emerald-50 min-h-screen">
+<body class="flex flex-col bg-emerald-50/50 min-h-screen">
     <nav class="bg-emerald-900 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
             @auth
