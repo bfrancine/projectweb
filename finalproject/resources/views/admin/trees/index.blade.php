@@ -2,6 +2,10 @@
 
 @section('title', 'Manage Trees')
 
+@section('breadcrumb')
+    <x-breadcrumb :items="[['label' => 'Manage Trees']]" />
+@endsection
+
 @section('content')
     <div class="container mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-6">
@@ -12,11 +16,7 @@
             </button>
         </div>
 
-        @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
-                <span class="block sm:inline">{{ session('success') }}</span>
-            </div>
-        @endif
+        <x-flash-alert />
 
         @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
@@ -43,7 +43,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price
                         </th>
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
                         </th>
                     </tr>
                 </thead>
@@ -77,11 +77,15 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">${{ number_format($tree->price, 2) }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm space-x-3">
+                            <td class="px-6 py-4 text-center whitespace-nowrap text-sm space-x-3">
                                 <button
                                     onclick="editTree( {{ $tree->id }},{{ $tree->species_id }},'{{ $tree->location }}',{{ $tree->size }},'{{ $tree->status }}', 
                                     {{ $tree->price }}, '{{ $tree->photo ? Storage::url($tree->photo) : '' }}')"
-                                    class="text-blue-600 hover:text-blue-900">
+                                    class="inline-flex items-center px-3 py-2 border text-sm font-medium rounded-md border-emerald-600 text-emerald-700 hover:bg-emerald-50 transition-colors duration-200">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
                                     Edit
                                 </button>
                                 <!-- Add Delete Button -->
@@ -89,10 +93,18 @@
                                     onsubmit="return confirm('Are you sure you want to delete this tree?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">
+                                    <button type="submit"
+                                        class="inline-flex items-center px-3 py-2 border text-sm font-medium rounded-md border-red-50 text-red-700 bg-red-50 transition-colors duration-200">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                clip-rule="evenodd" />
+                                        </svg>
                                         Delete
                                     </button>
                                 </form>
+
                             </td>
                         </tr>
                     @endforeach

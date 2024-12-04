@@ -33,7 +33,7 @@
                     icon="icons.users-admin" color="purple" />
 
                 <!-- Manage Friends Card -->
-                <x-dashboard.action-card title="Manage Friends" description="Manage friend accounts and trees"
+                <x-dashboard.action-card title="Manage Friends" description="Monitor and manage friend trees"
                     :route="route('friends.index')" icon="icons.users" color="orange" />
 
             </div>

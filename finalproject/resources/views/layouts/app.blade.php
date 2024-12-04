@@ -25,14 +25,6 @@
 
             <div class="space-x-4">
                 @auth
-                    @if (auth()->user()->role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}">Dashboard</a>
-                    @elseif(auth()->user()->role === 'operator')
-                        <a href="{{ route('operator.dashboard') }}">Dashboard</a>
-                    @else
-                        <a href="{{ route('friend.available-trees') }}">Available Trees</a>
-                        <a href="{{ route('friend.my-trees') }}">My Trees</a>
-                    @endif
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="text-white">Logout</button>
@@ -46,6 +38,12 @@
     </nav>
 
     <main class="container mx-auto py-6">
+        @if (!Request::routeIs('*.dashboard'))
+            <div class="mb-6">
+                @yield('breadcrumb')
+            </div>
+        @endif
+
         @yield('content')
     </main>
 

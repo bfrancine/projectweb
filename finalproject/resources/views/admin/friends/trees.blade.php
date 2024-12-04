@@ -2,6 +2,10 @@
 
 @section('title', 'Friend Trees Management')
 
+@section('breadcrumb')
+    <x-breadcrumb :items="[['label' => 'Manage Friends', 'route' => 'friends.index'], ['label' => 'Manage Trees']]" />
+@endsection
+
 @section('content')
     <div class="container mx-auto px-4 py-8">
         <!-- Friend Info Header -->
@@ -9,13 +13,14 @@
             <div class="bg-white rounded-lg shadow">
                 <div class="p-6">
                     <div class="flex items-center">
-                        <div class="h-12 w-12 rounded-full bg-green-500 flex items-center justify-center">
+                        <div class="h-12 w-12 rounded-full bg-green-700 flex items-center justify-center">
                             <span class="text-xl font-medium text-white">
                                 {{ strtoupper(substr($friend->first_name, 0, 1)) }}
                             </span>
                         </div>
                         <div class="ml-4">
-                            <h1 class="text-2xl font-bold text-gray-800">{{ $friend->first_name }} {{ $friend->last_name }}'s
+                            <h1 class="text-2xl font-bold text-gray-800">{{ $friend->first_name }}
+                                {{ $friend->last_name }}'s
                                 Trees</h1>
                             <p class="text-gray-600">{{ $friend->email }}</p>
                         </div>
@@ -24,67 +29,93 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow">
+        <div class="bg-white rounded-lg shadow-sm">
             <div class="p-6">
                 <div class="overflow-x-auto">
                     <table class="min-w-full table-auto">
                         <thead>
-                            <tr class="bg-gray-50">
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    ID
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Species
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Status
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Current Size
-                                </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Actions
-                                </th>
+                            <tr class="bg-gray-50 border-b border-gray-100">
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    ID</th>
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Species</th>
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Status</th>
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Current Size</th>
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
+                        <tbody class="divide-y divide-gray-100">
                             @forelse ($trees as $tree)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ $tree->id }}
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        #{{ $tree->id }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {{ $tree->species->commercial_name }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span
-                                            class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                            {{ $tree->status === 'available' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
+                                            class="px-3 py-1 inline-flex text-sm leading-5 font-medium rounded-full 
+                                            {{ $tree->status === 'available' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800' }}">
                                             {{ ucfirst($tree->status) }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        {{ $tree->size }} cm
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <span class="font-medium">{{ $tree->size }}</span>
+                                        <span class="text-gray-500">cm</span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap space-x-2">
                                         <button onclick="openEditTreeModal({{ $tree->id }}, {{ json_encode($tree) }})"
-                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                                            class="inline-flex items-center px-3 py-2 border text-sm font-medium rounded-md 
+                                            border-emerald-600 text-emerald-700 hover:bg-emerald-50 transition-colors duration-200">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
                                             Edit Tree
                                         </button>
                                         <button onclick="openUpdateModal({{ $tree->id }}, {{ $tree->size }})"
-                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
+                                            class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md
+                                            text-white bg-emerald-600 hover:bg-emerald-700 transition-colors duration-200">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                            </svg>
                                             Record Update
                                         </button>
-                                        <a href="{{ route('tree-updates.history', $tree) }}"
-                                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200">
+                                        <a href="{{ route('tree-history.index', ['tree' => $tree, 'from' => 'My Trees']) }}"
+                                            class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md
+                                            text-emerald-700 bg-emerald-100 hover:bg-emerald-200 transition-colors duration-200">
+                                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
                                             View History
                                         </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                                        No trees found for this friend
+                                    <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                                        <div class="flex flex-col items-center">
+                                            <svg class="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                                            </svg>
+                                            <p class="text-gray-600">No trees found for this friend</p>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforelse
@@ -94,186 +125,11 @@
             </div>
         </div>
 
-        <!-- Edit Tree Modal -->
-        <div id="editTreeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
-            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                <div class="mt-3">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Edit Tree Information</h3>
-                    <form id="editTreeForm" action="" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Size (cm)</label>
-                                <input type="number" name="size" id="editSize" step="0.1"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Species</label>
-                                <select name="species_id" id="editSpecies"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                                    @foreach ($species as $specie)
-                                        <option value="{{ $specie->id }}">{{ $specie->commercial_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Location</label>
-                                <textarea name="location" id="editLocation" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                                    rows="3" required></textarea>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Status</label>
-                                <select name="status" id="editStatus"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                                    <option value="available">Available</option>
-                                    <option value="sold">Sold</option>
-                                </select>
-                            </div>
-
-                            <div class="flex justify-end space-x-3 mt-4">
-                                <button type="button" onclick="closeEditTreeModal()"
-                                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
-                                    Cancel
-                                </button>
-                                <button type="submit"
-                                    class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                    Update Tree
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        <!-- Edit Friend Tree Modal -->
+        @include('layouts.modal.tree.edit-friend-tree-modal')
 
         <!-- Update Modal -->
-        <div id="updateModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
-            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-                <div class="mt-3">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Record Tree Update</h3>
-                    <form id="updateForm" action="" method="POST" enctype="multipart/form-data"
-                        onsubmit="return validateSize()">
-                        @csrf
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Size (cm)</label>
-                                <input type="number" name="size" id="sizeInput" step="0.1"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                                <p id="sizeError" class="mt-1 text-sm text-red-600 hidden">The new size must be greater than
-                                    the current size</p>
-                            </div>
-                            <div>
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="photo">Photo</label>
-                                <div
-                                    class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                    <div class="space-y-1 text-center">
-                                        <img id="imagePreview" class="mx-auto h-32 w-32 object-cover rounded-lg hidden" />
-                                        <div class="flex text-sm text-gray-600">
-                                            <label for="photo"
-                                                class="relative cursor-pointer bg-white rounded-md font-medium text-green-600 hover:text-green-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-green-500">
-                                                <span>Upload a file</span>
-                                                <input type="file" name="photo" id="photo" required
-                                                    accept="image/*" class="sr-only" onchange="previewImage(this)">
-                                            </label>
-                                        </div>
-                                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex justify-end space-x-3 mt-4">
-                                <button type="button" onclick="closeUpdateModal()"
-                                    class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
-                                    Cancel
-                                </button>
-                                <button type="submit"
-                                    class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                    Save Update
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        @include('layouts.modal.tree-history.update-tree-modal')
     </div>
 
-    <script>
-        let currentTreeSize = 0;
-
-        function previewImage(input) {
-            const preview = document.getElementById('imagePreview');
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.classList.remove('hidden');
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function openEditTreeModal(treeId, tree) {
-            const modal = document.getElementById('editTreeModal');
-            const form = document.getElementById('editTreeForm');
-
-            // Set form action
-            form.action = `/admin/friends/{{ $friend->id }}/trees/${treeId}`;
-
-            // Fill form fields
-            document.getElementById('editSize').value = tree.size;
-            document.getElementById('editSpecies').value = tree.species_id;
-            document.getElementById('editLocation').value = tree.location;
-            document.getElementById('editStatus').value = tree.status;
-
-            modal.classList.remove('hidden');
-        }
-
-        function closeEditTreeModal() {
-            const modal = document.getElementById('editTreeModal');
-            modal.classList.add('hidden');
-        }
-
-        function openUpdateModal(treeId, currentSize) {
-            const modal = document.getElementById('updateModal');
-            const form = document.getElementById('updateForm');
-            const sizeInput = document.getElementById('sizeInput');
-
-            currentTreeSize = currentSize;
-            form.action = `/admin/tree-updates/${treeId}`;
-            sizeInput.value = currentSize;
-            sizeInput.min = currentSize;
-            modal.classList.remove('hidden');
-
-            // Reset image preview
-            const imagePreview = document.getElementById('imagePreview');
-            imagePreview.classList.add('hidden');
-            imagePreview.src = '';
-
-            document.getElementById('sizeError').classList.add('hidden');
-        }
-
-        function validateSize() {
-            const sizeInput = document.getElementById('sizeInput');
-            const errorElement = document.getElementById('sizeError');
-
-            if (parseFloat(sizeInput.value) <= currentTreeSize) {
-                errorElement.classList.remove('hidden');
-                return false;
-            }
-
-            errorElement.classList.add('hidden');
-            return true;
-        }
-
-        function closeUpdateModal() {
-            const modal = document.getElementById('updateModal');
-            modal.classList.add('hidden');
-        }
-    </script>
 @endsection

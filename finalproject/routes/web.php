@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FriendController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SpeciesController;
 use App\Http\Controllers\TreeController;
 use App\Http\Controllers\TreeHistoryController;
@@ -23,10 +24,13 @@ Route::middleware('guest')->group(function () {
     Route::post('register', [RegisterController::class, 'register']);
 });
 
-// Logout Route (requires authentication)
-Route::post('logout', [LoginController::class, 'logout'])
-    ->middleware('auth')
-    ->name('logout');
+Route::middleware(['auth'])->group(function () {
+    // Logout Route (requires authentication)
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+    // Available Trees (requires authentication)
+    Route::get('/tree-history/history/{tree}', [TreeHistoryController::class, 'history'])
+        ->name('tree-history.index');
+});
 
 // Admin routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -60,8 +64,41 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/admin/friends/{friend}/trees/{tree}', [TreeController::class, 'updateFriendTree'])
         ->name('admin.friend.trees.update');
 
-    Route::post('/admin/tree-updates/{tree}', [TreeHistoryController::class, 'store'])
-        ->name('admin.tree-updates.store');
+    Route::post('/admin/tree-history/{tree}', [TreeHistoryController::class, 'store'])
+        ->name('admin.tree-history.store');
+});
+
+// Operator routes
+Route::middleware(['auth', 'role:operator'])->group(function () {
+    Route::get('/operator/dashboard', [DashboardController::class, 'operatorDashboard'])
+        ->name('operator.dashboard');
+
+    Route::get('/operator/trees', [TreeController::class, 'listPurchasedTrees'])
+        ->name('operator.trees.list');
+
+    Route::post('/tree-history/{tree}', [TreeHistoryController::class, 'store'])
+        ->name('tree-history.store');
+});
+
+// Friend routes
+Route::middleware(['auth', 'role:friend'])->group(function () {
+    // Dashboard
+    Route::get('/friend/dashboard', [DashboardController::class, 'friendDashboard'])
+        ->name('friend.dashboard');
+
+    // Trees
+    Route::get('/friend/my-trees', [FriendController::class, 'myTrees'])
+        ->name('friend.my-trees');
+
+    Route::get('/friend/available-trees', [FriendController::class, 'availableTrees'])
+        ->name('friend.available-trees');
+
+    Route::get('/friend/trees/{tree}', [TreeController::class, 'show'])
+        ->name('friend.trees.show');
+
+    // Purchases
+    Route::post('/friend/trees/{tree}/purchase', [PurchaseController::class, 'store'])
+        ->name('friend.purchases.store');
 });
 
 // Error routes

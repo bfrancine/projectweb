@@ -7,10 +7,15 @@ use App\Models\User;
 use App\Models\Tree;
 use Auth;
 
+/**
+ * Handles dashboard functionality for different user roles
+ * Provides role-specific views and statistics for admins, operators, and friends
+ */
 class DashboardController extends Controller
 {
     /**
-     * Redirects users to their role-specific dashboard
+     * Redirects users to their role-specific dashboard based on their role
+     * Unauthorized users are redirected to login page
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -30,7 +35,8 @@ class DashboardController extends Controller
     }
 
     /**
-     * Display admin dashboard with overview statistics
+     * Displays admin dashboard with overview statistics
+     * Shows counts of friends, available trees, and sold trees
      * 
      * @return \Illuminate\View\View
      */
@@ -46,7 +52,8 @@ class DashboardController extends Controller
     }
 
     /**
-     * Display operator dashboard with relevant metrics and recent updates
+     * Displays operator dashboard with metrics and recent tree updates
+     * Shows friend count, available trees, and latest tree history
      * 
      * @return \Illuminate\View\View
      */
@@ -65,6 +72,12 @@ class DashboardController extends Controller
         return view('operator.dashboard', compact('stats', 'recentUpdates'));
     }
 
+    /**
+     * Displays friend dashboard showing their trees and available trees
+     * Shows count of owned trees, available trees, and recent tree list
+     * 
+     * @return \Illuminate\View\View Returns friend dashboard view with tree statistics and list
+     */
     public function friendDashboard()
     {
         $user = auth()->user();

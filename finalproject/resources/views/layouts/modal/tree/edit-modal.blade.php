@@ -1,6 +1,6 @@
 <div id="editTreeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3">
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Edit Tree</h3>
             <form id="editTreeForm" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -68,7 +68,7 @@
 
                     <div class="flex justify-end space-x-3 mt-6">
                         <button type="button" onclick="closeModal('editTreeModal')"
-                            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                            class="bg-white text-gray-700 px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border border-gray-300 hover:bg-gray-50 mr-2">
                             Cancel
                         </button>
                         <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">

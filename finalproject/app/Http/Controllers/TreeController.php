@@ -11,13 +11,33 @@ use Storage;
 
 class TreeController extends Controller
 {
+    /**
+     * Display a listing of all trees with their species and owner information
+     * 
+     * @return \Illuminate\View\View Returns view with trees and available species
+     */
     public function index()
     {
-        $trees = Tree::with(['species', 'owner'])->get();
+        $trees = Tree::with(['species', 'owner'])
+            ->orderBy('created_at', 'desc')
+            ->get();
         $species = Species::all();
         return view('admin.trees.index', compact('trees', 'species'));
     }
 
+    /**
+     * Store a new tree record and its initial history
+     * 
+     * @param \Illuminate\Http\Request $request The incoming request with tree data:
+     *                                         - species_id
+     *                                         - location
+     *                                         - price
+     *                                         - photo
+     *                                         - size
+     * @return \Illuminate\Http\RedirectResponse Redirects to tree list after creation
+     * 
+     * @throws \Illuminate\Validation\ValidationException When validation fails
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -43,6 +63,22 @@ class TreeController extends Controller
         return redirect()->route('trees.index')->with('success', 'Tree created successfully');
     }
 
+
+    /**
+     * Update an existing tree's information
+     * 
+     * @param \Illuminate\Http\Request $request The incoming request with updated tree data:
+     *                                         - species_id
+     *                                         - location
+     *                                         - status
+     *                                         - price (optional)
+     *                                         - photo (optional)
+     *                                         - size
+     * @param \App\Models\Tree $tree The tree instance to update
+     * @return \Illuminate\Http\RedirectResponse Redirects to tree list after update
+     * 
+     * @throws \Illuminate\Validation\ValidationException When validation fails
+     */
     public function update(Request $request, Tree $tree)
     {
         $validated = $request->validate([
@@ -62,6 +98,16 @@ class TreeController extends Controller
         return redirect()->route('trees.index')->with('success', 'Tree updated successfully');
     }
 
+    /**
+     * Update a friend's tree information
+     * 
+     * @param \Illuminate\Http\Request $request The request with tree update data
+     * @param \App\Models\User $friend The friend who owns the tree
+     * @param \App\Models\Tree $tree The tree to update
+     * @return \Illuminate\Http\RedirectResponse Back to previous page with status
+     * 
+     * @throws \Illuminate\Validation\ValidationException When validation fails
+     */
     public function updateFriendTree(Request $request, User $friend, Tree $tree)
     {
         if ($tree->owner_id !== $friend->id) {
@@ -80,6 +126,12 @@ class TreeController extends Controller
         return back()->with('success', 'Tree information updated successfully');
     }
 
+    /**
+     * Remove a tree and its associated photo from storage
+     * 
+     * @param \App\Models\Tree $tree The tree to delete
+     * @return \Illuminate\Http\RedirectResponse Redirects to tree list after deletion
+     */
     public function destroy(Tree $tree)
     {
         if ($tree->photo && Storage::disk('public')->exists($tree->photo)) {

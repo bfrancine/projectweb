@@ -27,7 +27,12 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-6. Configure your database in `.env` file:
+6. Create symbolic link for storage:
+```bash
+php artisan storage:link
+```
+
+7. Configure your database in `.env` file:
 ```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1

@@ -4,22 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\Purchase;
 use App\Models\Tree;
-use App\Models\Friend;
 use Auth;
 use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
+    /**
+     * Store a new purchase record for a tree
+     * 
+     * @param \Illuminate\Http\Request $request The incoming HTTP request object
+     * @param \App\Models\Tree $tree The tree model instance to be purchased
+     * 
+     * @throws \Exception When database operations fail
+     * @return \Illuminate\Http\RedirectResponse Returns redirect response with success/error message
+     */
     public function store(Request $request, Tree $tree)
     {
-        // Validate tree is available
         if ($tree->status !== 'available') {
             return back()->with('error', 'This tree is no longer available');
         }
 
         try {
-            // Create purchase record
-            $purchase = Purchase::create([
+            Purchase::create([
                 'tree_id' => $tree->id,
                 'user_id' => Auth::id(),
                 'amount' => $tree->price,
@@ -32,7 +38,6 @@ class PurchaseController extends Controller
                 'owner_id' => Auth::id()
             ]);
 
-            // Redirect with success message
             return redirect()->route('friend.available-trees')
                 ->with('success', 'Tree purchased successfully! You can view it in your trees section.');
 

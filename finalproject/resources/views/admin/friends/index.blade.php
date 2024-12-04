@@ -2,17 +2,17 @@
 
 @section('title', 'Manage Friends Trees')
 
+@section('breadcrumb')
+    <x-breadcrumb :items="[['label' => 'Manage Friends']]" />
+@endsection
+
 @section('content')
     <div class="container mx-auto px-4 py-8">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">Friends Trees Management</h1>
         </div>
 
-        @if (session('success'))
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
-                <p>{{ session('success') }}</p>
-            </div>
-        @endif
+        <x-flash-alert />
 
         <!-- Friends Table -->
         <div class="bg-white rounded-lg shadow overflow-hidden">
