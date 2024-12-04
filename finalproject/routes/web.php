@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\RegisterController; //Auth para manejar la autentificación
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\SpecieController;
 use App\Http\Controllers\TreeController;
 use App\Http\Controllers\FriendController;
@@ -9,11 +11,23 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 
-Route::get('/', function () {
-    return "Hello World";
+Route::get('/', [DashboardController::class, 'index'])->name('home');
+
+// Routes for guests only
+Route::middleware('guest')->group(function () {
+    // Login Routes
+    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [LoginController::class, 'login']);
+
+    // Registration Routes (only for friends)
+    Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('register', [RegisterController::class, 'register']);
 });
 
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+// Logout Route (requires authentication)
+Route::post('logout', [LoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
 Route::get('species', [SpecieController::class, 'index']);
 Route::get('species/{id}', [SpecieController::class, 'show']);
@@ -29,7 +43,6 @@ Route::post('purchase', [PurchaseController::class, 'purchaseTree']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/list-trees/{friend_id}', [FriendController::class, 'listTrees'])->name('friend.listTrees');
-    Route::post('/logout', [FriendController::class, 'logout'])->name('auth.logout');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -37,9 +50,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/species', [AdminController::class, 'showSpecies'])->name('admin.species');
     Route::get('/admin/friends', [AdminController::class, 'showFriends'])->name('admin.friends');
     Route::get('/admin/trees', [AdminController::class, 'showTrees'])->name('admin.trees');
-
-    // Cerrar sesión
-    Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 });
 
 Route::resource('species', SpecieController::class);
@@ -55,11 +65,6 @@ Route::get('/species/{id}', [SpecieController::class, 'show'])->name('species.sh
 Route::get('/species/{id}/edit', [SpecieController::class, 'edit'])->name('species.edit');  // Formulario para editar
 Route::put('/species/{id}', [SpecieController::class, 'update'])->name('species.update');  // Actualizar especie
 Route::delete('/species/{id}', [SpecieController::class, 'destroy'])->name('species.destroy');  // Eliminar especie
-
-
-Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Rutas protegidas
 Route::middleware(['auth', 'role:admin'])->group(function () {
@@ -78,15 +83,6 @@ Route::get('/register/friend', [FriendController::class, 'showRegisterForm'])->n
 
 // Ruta para manejar el registro
 Route::post('/register/friend', [FriendController::class, 'register'])->name('friend.register');
-
-// Ruta para mostrar el formulario de login
-Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-
-// Ruta para manejar el login
-Route::post('login', [AuthController::class, 'login']);
-
-// Ruta para hacer logout
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 Route::get('/friend/dashboard/{friend_id}', [FriendController::class, 'dashboard'])->name('friend.dashboard');

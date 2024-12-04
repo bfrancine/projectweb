@@ -2,27 +2,28 @@
 
 namespace App\Http\Middleware;
 
+use Auth;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
     /**
      * Handle an incoming request.
      */
-    public function handle(Request $request, Closure $next, string $role): mixed
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        // Verificar si el usuario está autenticado
         if (!Auth::check()) {
-            return redirect()->route('login'); // Redirigir al login si no está autenticado
+            return redirect('login');
         }
 
-        // Validar el rol del usuario
-        if (Auth::user()->type_user !== $role) {
-            abort(403, 'Unauthorized'); // Mostrar un error 403 si no tiene acceso
+        $user = Auth::user();
+
+        if (in_array($user->role, $roles)) {
+            return $next($request);
         }
 
-        return $next($request);
+        return redirect()->route('unauthorized');
     }
 }
