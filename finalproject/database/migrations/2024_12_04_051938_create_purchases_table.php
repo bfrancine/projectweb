@@ -4,18 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('purchase_tree', function (Blueprint $table) {
+        Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('purchase_id')->constrained('purchase')->onDelete('cascade');
-            $table->foreignId('tree_id')->constrained('tree')->onDelete('cascade');
-            $table->decimal('price_at_purchase', 10, 2);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('tree_id')->constrained()->onDelete('cascade');
+            $table->timestamp('purchase_date')->useCurrent();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchase_tree');
+        Schema::dropIfExists('purchases');
     }
 };
