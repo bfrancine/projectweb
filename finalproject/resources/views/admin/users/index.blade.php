@@ -55,7 +55,7 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center whitespace-nowrap text-sm space-x-3">
-                                @if ($user->id === auth()->id())
+                                @if ($user->id === auth()->id()) 
                                     <span
                                         class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-xl bg-orange-100 text-orange-800">
                                         Current User

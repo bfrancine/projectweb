@@ -49,10 +49,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
+    } 
 
     public function trees()
     {
-        return $this->hasMany(Tree::class, 'owner_id');
+        return $this->hasMany(Tree::class, 'owner_id'); //relacion de 1:N
     }
 }

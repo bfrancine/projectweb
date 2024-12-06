@@ -17,7 +17,7 @@ Route::get('/', [DashboardController::class, 'index'])->name('home');
 Route::middleware('guest')->group(function () {
     // Login Routes
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [LoginController::class, 'login']);
+    Route::post('login', [LoginController::class, 'login']); 
 
     // Registration Routes (only for friends)
     Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');

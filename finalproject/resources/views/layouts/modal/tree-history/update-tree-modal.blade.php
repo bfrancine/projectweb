@@ -36,7 +36,7 @@
                             class="bg-white text-gray-700 px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border border-gray-300 hover:bg-gray-50 mr-2">
                             Cancel
                         </button>
-                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lj hover:bg-green-700">
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
                             Save Update
                         </button>
                     </div>
@@ -69,7 +69,7 @@
         const sizeInput = document.getElementById('sizeInput');
 
         currentTreeSize = currentSize;
-        form.action = `/admin/tree-updates/${treeId}`;
+        form.action = `/tree-history/${treeId}`;
         sizeInput.value = currentSize;
         sizeInput.min = currentSize;
         modal.classList.remove('hidden');

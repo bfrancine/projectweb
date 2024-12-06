@@ -13,12 +13,12 @@ class TreeController extends Controller
 {
     /**
      * Display a listing of all trees with their species and owner information
-     * 
+     *
      * @return \Illuminate\View\View Returns view with trees and available species
      */
-    public function index()
+    public function index() //trae las vistas
     {
-        $trees = Tree::with(['species', 'owner'])
+        $trees = Tree::with(['species', 'owner']) //el with nos ayuda como un tipo join
             ->orderBy('created_at', 'desc')
             ->get();
         $species = Species::all();
@@ -27,7 +27,7 @@ class TreeController extends Controller
 
     /**
      * Store a new tree record and its initial history
-     * 
+     *
      * @param \Illuminate\Http\Request $request The incoming request with tree data:
      *                                         - species_id
      *                                         - location
@@ -35,7 +35,7 @@ class TreeController extends Controller
      *                                         - photo
      *                                         - size
      * @return \Illuminate\Http\RedirectResponse Redirects to tree list after creation
-     * 
+     *
      * @throws \Illuminate\Validation\ValidationException When validation fails
      */
     public function store(Request $request)
@@ -66,7 +66,7 @@ class TreeController extends Controller
 
     /**
      * Update an existing tree's information
-     * 
+     *
      * @param \Illuminate\Http\Request $request The incoming request with updated tree data:
      *                                         - species_id
      *                                         - location
@@ -76,7 +76,7 @@ class TreeController extends Controller
      *                                         - size
      * @param \App\Models\Tree $tree The tree instance to update
      * @return \Illuminate\Http\RedirectResponse Redirects to tree list after update
-     * 
+     *
      * @throws \Illuminate\Validation\ValidationException When validation fails
      */
     public function update(Request $request, Tree $tree)
@@ -100,12 +100,12 @@ class TreeController extends Controller
 
     /**
      * Update a friend's tree information
-     * 
+     *
      * @param \Illuminate\Http\Request $request The request with tree update data
      * @param \App\Models\User $friend The friend who owns the tree
      * @param \App\Models\Tree $tree The tree to update
      * @return \Illuminate\Http\RedirectResponse Back to previous page with status
-     * 
+     *
      * @throws \Illuminate\Validation\ValidationException When validation fails
      */
     public function updateFriendTree(Request $request, User $friend, Tree $tree)
@@ -128,13 +128,13 @@ class TreeController extends Controller
 
     /**
      * Remove a tree and its associated photo from storage
-     * 
+     *
      * @param \App\Models\Tree $tree The tree to delete
      * @return \Illuminate\Http\RedirectResponse Redirects to tree list after deletion
      */
     public function destroy(Tree $tree)
     {
-        if ($tree->photo && Storage::disk('public')->exists($tree->photo)) {
+        if ($tree->photo && Storage::disk('public')->exists($tree->photo)) { //elimina la fotografia si elimino el arbol
             Storage::disk('public')->delete($tree->photo);
         }
 

@@ -11,10 +11,10 @@ class PurchaseController extends Controller
 {
     /**
      * Store a new purchase record for a tree
-     * 
+     *
      * @param \Illuminate\Http\Request $request The incoming HTTP request object
      * @param \App\Models\Tree $tree The tree model instance to be purchased
-     * 
+     *
      * @throws \Exception When database operations fail
      * @return \Illuminate\Http\RedirectResponse Returns redirect response with success/error message
      */
@@ -42,7 +42,6 @@ class PurchaseController extends Controller
                 ->with('success', 'Tree purchased successfully! You can view it in your trees section.');
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return back()->with('error', 'There was an error processing your purchase. Please try again.');
         }
     }

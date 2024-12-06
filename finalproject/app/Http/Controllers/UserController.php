@@ -11,7 +11,7 @@ class UserController extends Controller
     /**
      * Display a listing of administrative users (admins and operators)
      * Excludes users with 'friend' role from the listing
-     * 
+     *
      * @return \Illuminate\View\View Returns view with list of administrative users
      */
     public function index()
@@ -22,7 +22,7 @@ class UserController extends Controller
 
     /**
      * Store a new administrative user in the system
-     * 
+     *
      * @param \Illuminate\Http\Request $request The incoming request with user data:
      *                                         - first_name
      *                                         - last_name
@@ -30,7 +30,7 @@ class UserController extends Controller
      *                                         - password (min 8 chars, needs confirmation)
      *                                         - role (admin/operator)
      * @return \Illuminate\Http\RedirectResponse Redirects to users list after creation
-     * 
+     *
      * @throws \Illuminate\Validation\ValidationException When validation fails
      */
     public function store(Request $request)
@@ -52,7 +52,7 @@ class UserController extends Controller
     /**
      * Update an existing user's information
      * Allows password update as optional field
-     * 
+     *
      * @param \Illuminate\Http\Request $request The incoming request with updated user data:
      *                                         - first_name
      *                                         - last_name
@@ -61,7 +61,7 @@ class UserController extends Controller
      *                                         - password: Optional new password (with confirmation)
      * @param \App\Models\User $user The user instance to update
      * @return \Illuminate\Http\RedirectResponse Redirects to users list after update
-     * 
+     *
      * @throws \Illuminate\Validation\ValidationException When validation fails
      */
     public function update(Request $request, User $user)
@@ -87,7 +87,7 @@ class UserController extends Controller
 
     /**
      * Remove a user from the system
-     * 
+     *
      * @param \App\Models\User $user The user to delete
      * @return \Illuminate\Http\RedirectResponse Redirects to users list with status message
      */

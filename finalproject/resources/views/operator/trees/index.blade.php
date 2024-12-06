@@ -99,7 +99,7 @@
         </div>
 
         <!-- Update Modal -->
-        @include('layouts.modal.tree-history.update-tree-modal')
+        @include('layouts.modal.tree-history.update-tree-modal') 
     </div>
 
 @endsection
