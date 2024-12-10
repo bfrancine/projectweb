@@ -32,7 +32,7 @@ class TreeHistoryController extends Controller
             $validated['photo'] = $request->file('photo')->store('tree-history', 'public');
         }
 
-        TreeHistory::create([
+        TreeHistory::create([ //cuenta como un select 
             'tree_id' => $tree->id,
             'size' => $validated['size'],
             'photo' => $validated['photo'],

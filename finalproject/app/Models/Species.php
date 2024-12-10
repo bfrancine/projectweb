@@ -13,6 +13,6 @@ class Species extends Model
 
     public function trees()
     {
-        return $this->hasMany(Tree::class);
+        return $this->hasMany(Tree::class); //el "hasmany" es para hacer una relación de uno a muchos
     }
 }

@@ -9,48 +9,70 @@
         <x-breadcrumb :items="[['label' => $previousTitle, 'previous' => true], ['label' => 'Tree History']]" />
     @endif
 @endsection
-
 @section('content')
+    <!-- Contenedor principal con márgenes y padding -->
     <div class="container mx-auto px-4 py-8">
+        <!-- Caja con fondo blanco, bordes redondeados y sombra -->
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
 
+            <!-- Encabezado con fondo degradado y título del historial del árbol -->
             <div class="bg-gradient-to-br from-green-950 to-emerald-950 text-white rounded-lg shadow-xl overflow-hidden">
+                <!-- Encabezado del historial -->
                 <x-tree-history.tree-header />
 
+                <!-- Contenedor de estadísticas -->
                 <div class="p-4 sm:p-6">
+                    <!-- Grid para organizar las tarjetas de estadísticas -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
-                        {{-- Species Card --}}
-                        <x-tree-history.tree-stat-card label="Species" :value="$tree->species->commercial_name"
-                            icon='<path fill="currentColor" stroke="currentColor" stroke-width=".5" d="M20.781 17.375l-2.7-3.375h.919c.373 0 .715-.207.887-.538.172-.331.146-.729-.068-1.035l-7-10c-.317-.452-.94-.562-1.393-.246-.091.063-.158.146-.221.231-.025.015-7.025 10.015-7.025 10.015-.214.306-.24.704-.068 1.035.173.331.515.538.888.538h.919l-2.7 3.375c-.24.301-.287.712-.121 1.059.167.345.518.566.902.566h7v3c0 .553.448 1 1 1s1-.447 1-1v-3h7c.384 0 .735-.221.901-.566.167-.347.12-.758-.12-1.059zm-7.781-.375v-5c0-.553-.448-1-1-1s-1 .447-1 1v5h-4.919l2.7-3.375c.24-.301.287-.712.121-1.059-.167-.345-.518-.566-.902-.566h-1.08l5.08-7.256 5.08 7.256h-1.08c-.384 0-.735.221-.901.566-.167.347-.12.758.121 1.059l2.7 3.375h-4.92z"/>' />
 
-                        {{-- Location Card --}}
-                        <x-tree-history.tree-stat-card label="Location" :value="$tree->location"
-                            icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>' />
+                        {{-- Tarjeta: Especie --}}
+                        <x-tree-history.tree-stat-card 
+                            label="Species" 
+                            :value="$tree->species->commercial_name"
+                            icon='<path fill="currentColor" stroke="currentColor" stroke-width=".5" d="..."/>' 
+                        />
 
-                        {{-- Size Card with Growth Icon --}}
-                        <x-tree-history.tree-stat-card label="Current Size" :value="$tree->size . ' cm'"
-                            icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19V5m0 0L7 9.5M12 5l5 4.5M3 20h18"/>' />
+                        {{-- Tarjeta: Ubicación --}}
+                        <x-tree-history.tree-stat-card 
+                            label="Location" 
+                            :value="$tree->location"
+                            icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="..."/>' 
+                        />
 
-                        {{-- Status Card --}}
-                        <x-tree-history.tree-stat-card label="Status" :value="ucfirst($tree->status)"
-                            icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>' />
+                        {{-- Tarjeta: Tamaño actual --}}
+                        <x-tree-history.tree-stat-card 
+                            label="Current Size" 
+                            :value="$tree->size . ' cm'"
+                            icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="..."/>' 
+                        />
+
+                        {{-- Tarjeta: Estado --}}
+                        <x-tree-history.tree-stat-card 
+                            label="Status" 
+                            :value="ucfirst($tree->status)"
+                            icon='<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="..."/>' 
+                        />
                     </div>
                 </div>
             </div>
 
-            <!-- Updates Timeline -->
+            <!-- Línea de tiempo de actualizaciones -->
             <div class="p-6">
                 <h2 class="text-xl font-semibold mb-6">Growth Timeline</h2>
 
                 @if ($updates->count() > 0)
+                    <!-- Si hay actualizaciones, muestra una lista -->
                     <div class="space-y-8">
                         @foreach ($updates as $update)
+                            <!-- Cada actualización se muestra en la línea de tiempo -->
                             <div class="relative pl-8 pb-8 border-l-2 border-green-200 last:pb-0">
-                                <!-- Timeline Dot -->
+                                <!-- Punto de la línea de tiempo -->
                                 <div class="absolute -left-2 top-0 w-4 h-4 bg-green-600 rounded-full"></div>
 
+                                <!-- Detalles de la actualización -->
                                 <div class="bg-gray-50 rounded-lg shadow-sm p-4">
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <!-- Imagen de la actualización (si está disponible) -->
                                         <div>
                                             @if ($update->photo)
                                                 <img src="{{ Storage::url($update->photo) }}" alt="Tree update"
@@ -58,13 +80,16 @@
                                             @endif
                                         </div>
                                         <div class="space-y-3">
+                                            <!-- Fecha de la actualización -->
                                             <div class="text-sm text-gray-500">
                                                 {{ $update->created_at->format('F j, Y') }}
                                             </div>
+                                            <!-- Tamaño del árbol en la actualización -->
                                             <div>
                                                 <span class="font-semibold">Size:</span>
                                                 {{ $update->size }} cm
                                             </div>
+                                            <!-- Crecimiento desde la última actualización -->
                                             <div class="text-sm text-gray-500">
                                                 Growth since last update:
                                                 @if ($loop->index < count($updates) - 1)
@@ -81,6 +106,7 @@
                         @endforeach
                     </div>
                 @else
+                    <!-- Mensaje si no hay actualizaciones -->
                     <div class="text-center py-12 bg-gray-50 rounded-lg">
                         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
@@ -94,5 +120,4 @@
             </div>
         </div>
     </div>
-
 @endsection

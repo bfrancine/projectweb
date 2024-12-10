@@ -43,7 +43,7 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected function casts(): array //el método casts se utiliza para convertir automáticamente los atributos de un modelo a un tipo de dato específico 
     {
         return [
             'email_verified_at' => 'datetime',

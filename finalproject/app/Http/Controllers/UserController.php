@@ -35,11 +35,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validated = $request->validate([ //datos obligatorios por el usuario 
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8|confirmed',
+            'email' => 'required|email|unique:users', //unique hace una palabra reservada, busca si el campo existe 
+            'password' => 'required|min:8|confirmed',//confirmed dos campos para la confirmación
             'role' => 'required|in:admin,operator',
         ]);
 
