@@ -63,7 +63,7 @@ class DashboardController extends Controller
             'friends_count' => User::where('role', 'friend')->count(),
             'available_trees' => Tree::where('status', 'available')->count(),
         ];
-
+        //consulta los datos recientes de la tabla o modelo TreeHistory
         $recentUpdates = TreeHistory::with(['tree.owner'])
             ->orderBy('created_at', 'desc')
             ->take(5)

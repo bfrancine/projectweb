@@ -29,7 +29,6 @@
                             </span>
                             Manage History Trees
                         </a>
-
                     </div>
                 </div>
             </div>
@@ -41,9 +40,13 @@
                         @forelse ($recentUpdates ?? [] as $update)
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <p class="text-sm text-gray-600">
-                                    Updated tree for
-                                    {{ $update->tree->owner->first_name . ' ' . $update->tree->owner->last_name }} - New
-                                    size: {{ $update->size }} cm
+                                    Updated tree for 
+                                    @if ($update->tree?->owner)
+                                        {{ $update->tree->owner->first_name . ' ' . $update->tree->owner->last_name }}
+                                    @else
+                                        Unknown Owner
+                                    @endif
+                                    - New size: {{ $update->size }} cm
                                 </p>
                                 <p class="text-xs text-gray-500 mt-1">
                                     {{ $update->created_at->diffForHumans() }}
@@ -58,4 +61,5 @@
                 </div>
             </div>
         </div>
-    @endsection
+    </div>
+@endsection
