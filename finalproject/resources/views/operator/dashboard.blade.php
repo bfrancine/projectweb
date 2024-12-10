@@ -42,7 +42,7 @@
                             <div class="p-3 bg-gray-50 rounded-lg">
                                 <p class="text-sm text-gray-600">
                                     Updated tree for
-                                    {{ $update->tree->owner->first_name . ' ' . $update->tree->owner->last_name }} - New
+                                    {{ $update->tree?->owner?->first_name . ' ' . $update->tree?->owner?->last_name ?? 'Unknown Owner' }}
                                     size: {{ $update->size }} cm
                                 </p>
                                 <p class="text-xs text-gray-500 mt-1">
